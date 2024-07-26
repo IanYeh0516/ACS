@@ -1,22 +1,44 @@
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.module.js';
-import { SceneManager } from './Scene.js';
-import { CubeModel } from './Model.js';
-import { Vector3 } from './model.js';
+function CreatePlayerCube() {
+    createCube({ x: -1.5, y: 0, z: -3.5 }, 'blue');
 
-// 初始化場景管理器
-const sceneManager = new SceneManager();
-
-// 創建一個 CubeModel 的實例
-const cubeModel = new CubeModel();
-const cube1 = cubeModel.createModel(new Vector3(0,0,0));
-const cube2 = cubeModel.createModel(new Vector3(1,1,1));
-sceneManager.addModel(cube1);
-sceneManager.addModel(cube2);
-// 每幀渲染
-function Update() {
-    requestAnimationFrame(Update);
-    sceneManager.render();
 }
 
-// 開始動畫
-Update();
+// Create an enemy cube at position (0, 1, 0)
+function CreateEnemyCube() {
+    createCube({ x: 3, y: 0, z: -7 }, 'red');
+
+}
+
+function createCube(position, color) {
+    var scene = document.querySelector('a-scene');
+    var cube = document.createElement('a-box');
+    cube.setAttribute('position', position);
+    cube.setAttribute('color', color);
+    scene.appendChild(cube);
+}
+
+function setup() {
+    var scene = document.querySelector('a-scene');
+    var camera = document.createElement('a-camera');
+    camera.setAttribute('log-rotation', ''); // Attach the log-rotation component
+    camera.setAttribute('position', { x: 0, y: 1, z: 0 });
+    scene.appendChild(camera);
+
+}
+
+AFRAME.registerComponent('log-rotation', {
+    tick: function () {
+        //var camera = this.el;
+        //var rotation = camera.getAttribute('rotation');
+        //console.log('Camera rotation:', rotation);
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    setup();
+    CreatePlayerCube();
+    CreateEnemyCube();
+});
+
+
+
