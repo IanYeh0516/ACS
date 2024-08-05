@@ -1,44 +1,36 @@
-function CreatePlayerCube() {
-    createCube({ x: -1.5, y: 0, z: -3.5 }, 'blue');
+import { CreateGLB } from './Model.js';
+import { SelectObjectAnimation } from './Model.js';
+import { CreateGUI } from './Gui.js';
 
+function CreatePlayerGLB() {
+    // 我方
+    CreateGLB('Player', { x: -1.5, y: 0, z: -3.5 }, './asset/a.glb', { x: 0.01, y: 0.01, z: 0.01 }, { x: 0, y: 180, z: 0 });
 }
-
-// Create an enemy cube at position (0, 1, 0)
-function CreateEnemyCube() {
-    createCube({ x: 3, y: 0, z: -7 }, 'red');
-
+function CreateEnemyGLB() {
+    //敵方
+    CreateGLB('Enemy', { x: 3, y: 0, z: -7 }, './asset/a.glb', { x: 0.01, y: 0.01, z: 0.01 }, { x: 0, y: -45, z: 0 });
 }
-
-function createCube(position, color) {
-    var scene = document.querySelector('a-scene');
-    var cube = document.createElement('a-box');
-    cube.setAttribute('position', position);
-    cube.setAttribute('color', color);
-    scene.appendChild(cube);
-}
-
+//初始化
 function setup() {
     var scene = document.querySelector('a-scene');
+    scene.setAttribute('renderer', 'antialias: true; colorManagement: true; sortObjects: true; physicallyCorrectLights: true');
     var camera = document.createElement('a-camera');
-    camera.setAttribute('log-rotation', ''); // Attach the log-rotation component
+    camera.setAttribute('look-controls', 'enabled: false');
+    camera.setAttribute('log-rotation', '');
     camera.setAttribute('position', { x: 0, y: 1, z: 0 });
+
+    var cursor = document.createElement('a-cursor');
+  
+    // Create the raycaster entity and add it to the camera
+    var raycaster = document.createElement('a-entity');
+    raycaster.setAttribute('raycaster', 'objects: .clickable');
+    camera.appendChild(cursor);
+    camera.appendChild(raycaster);
     scene.appendChild(camera);
-
 }
-
-AFRAME.registerComponent('log-rotation', {
-    tick: function () {
-        //var camera = this.el;
-        //var rotation = camera.getAttribute('rotation');
-        //console.log('Camera rotation:', rotation);
-    }
-});
-
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     setup();
-    CreatePlayerCube();
-    CreateEnemyCube();
+    CreatePlayerGLB();
+    CreateEnemyGLB();
+    CreateGUI();
 });
-
-
-
