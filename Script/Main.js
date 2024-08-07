@@ -1,6 +1,6 @@
 import { CreateGLB } from './Model.js';
 import { SelectObjectAnimation } from './Model.js';
-import { CreateGUI } from './Gui.js';
+import { createGUI } from './Gui.js';
 
 function CreatePlayerGLB() {
     // 我方
@@ -19,18 +19,14 @@ function setup() {
     camera.setAttribute('log-rotation', '');
     camera.setAttribute('position', { x: 0, y: 1, z: 0 });
 
-    var cursor = document.createElement('a-cursor');
   
     // Create the raycaster entity and add it to the camera
-    var raycaster = document.createElement('a-entity');
-    raycaster.setAttribute('raycaster', 'objects: .clickable');
-    camera.appendChild(cursor);
-    camera.appendChild(raycaster);
     scene.appendChild(camera);
 }
 document.addEventListener('DOMContentLoaded', function () {
     setup();
     CreatePlayerGLB();
     CreateEnemyGLB();
-    CreateGUI();
+    createGUI();
+    document.querySelector('a-scene').enterVR({passthrough: true});
 });
