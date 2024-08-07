@@ -1,16 +1,34 @@
-AFRAME.registerComponent('click', {  // 修正拼写错误
-    update: function () {
-      var el = this.el;
-      el.addEventListener('mouseleave', function () {
-        console.log('bbbbb');
-      });
-      el.addEventListener('mouseenter', function () {
-        console.log('ccccc');
-      });
+window.testButtonAction1 = function () {
+  var player = document.getElementById('Player');
+  player.setAttribute('animation-mixer', 'clip: Roll;');
+  setTimeout(function() {
+    player.setAttribute('animation-mixer', 'clip: Idle;');
+  }, 1000);
+  
+}
+window.testButtonAction2 = function () {
+  var player = document.getElementById('Player');
+  player.setAttribute('animation-mixer', 'clip: Run;');
+  setTimeout(function() {
+    player.setAttribute('animation-mixer', 'clip: Idle;');
+  }, 1000);
+  
+}
+window.testButtonAction3 = function () {
+  var player = document.getElementById('Player');
+  player.setAttribute('animation-mixer', 'clip: Spin;');
+  setTimeout(function() {
+    player.setAttribute('animation-mixer', 'clip: Idle;');
+  }, 1000);
+  
+}
+window.testButtonAction4 = function () {
+  var player = document.getElementById('Player');
+  player.setAttribute('animation-mixer', 'clip: Fear;');
+  setTimeout(function() {
+    player.setAttribute('animation-mixer', 'clip: Idle;');
+  }, 1000);
+}
 
-      el.addEventListener('mousedown', function () {
-        console.log('ssss');
-      });
 
-    }
-  });
+

@@ -1,128 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ACS Demo</title>
-    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.5.0/dist/aframe-extras.min.js"></script>
-    <script src="https://rawgit.com/rdub80/aframe-gui/master/dist/aframe-gui.min.js"></script>
-
-    <script src="./Script/newMain.js"></script> 
-</head>
-<body>
-    <a-scene renderer="antialias: true; colorManagement: true; sortObjects: true; physicallyCorrectLights: true">
-        <!-- Camera -->
-        <a-camera look-controls="enabled: false" log-rotation="" position="0 1 0"></a-camera>
-        <!-- Player GLB -->
-        <a-entity
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>ACS Demo</title>
+      <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.5.0/dist/aframe-extras.min.js"></script>
+      <script src="https://rawgit.com/rdub80/aframe-gui/master/dist/aframe-gui.min.js"></script>
+      <script src="./Script/newMain.js"></script> 
+   </head>
+   <body>
+      <a-scene renderer="antialias: true; colorManagement: true; sortObjects: true; physicallyCorrectLights: true">
+         <!-- Camera -->
+         <a-camera look-controls="enabled: false" log-rotation="" position="0 1 0"></a-camera>
+         <!-- Player GLB -->
+         <a-entity
             id="Player"
             position="-1.5 0 -3.5"
             scale="0.01 0.01 0.01"
             gltf-model="./asset/a.glb"
             rotation="0 180 0"
             animation-mixer="clip:Idle">
-        </a-entity>
-        <!-- Enemy GLB -->
-        <a-entity
+         </a-entity>
+         <!-- Enemy GLB -->
+         <a-entity
             id="Enemy"
             position="3 0 -7"
             scale="0.01 0.01 0.01"
             gltf-model="./asset/a.glb"
             rotation="0 -45 0"
             animation-mixer="clip:Idle">
-        </a-entity>
-        <!-- GUI Text Elements -->
+         </a-entity>
+         <!-- GUI Text Elements -->
+         <!-- Enemy HP UI Elements -->
 
-        <a-gui-flex-container
-        flex-direction="column" justify-content="center" align-items="normal" component-padding="0.1"
-        opacity="0.7" width="3.5" height="1.0" panel-color="#072B73" panel-rounded="0.2" scale="0.3 0.3 0.3"
-        position="-1 0.2 -2" rotation="0 0 0"  >
-        <a-gui-button
-        id="btn1"
-        width="2.5" 
-        height="0.7" 
-        onclick="testButtonAction1"
-        value="skill a"
-        >
-        </a-gui-button>
-        </a-gui-flex-container>
-        <a-gui-flex-container
-        flex-direction="column" justify-content="center" align-items="normal" component-padding="0.1"
-        opacity="0.7" width="3.5" height="1.0" panel-color="#072B73" panel-rounded="0.2" scale="0.3 0.3 0.3"
-        position="1 0.2 -2" rotation="0 0 0"  >
-        <a-gui-button
-          id="btn2"
-          width="2.5" 
-          height="0.7" 
-          onclick="testButtonAction2"
-          value="skill b"
-        ></a-gui-button>
-      </a-gui-flex-container>
-      <a-gui-flex-container
-      flex-direction="column" justify-content="center" align-items="normal" component-padding="0.1"
-      opacity="0.7" width="3.5" height="1.0" panel-color="#072B73" panel-rounded="0.2" scale="0.3 0.3 0.3"
-      position="-1 -0.2 -2" rotation="0 0 0"  >
-      <a-gui-button
-      id="btn3"
-      width="2.5" 
-      height="0.7" 
-      onclick="testButtonAction3"
-      value="skill c"
-      ></a-gui-button>
-    </a-gui-flex-container>
-    <a-gui-flex-container
-    flex-direction="column" justify-content="center" align-items="normal" component-padding="0.1"
-    opacity="0.7" width="3.5" height="1.0" panel-color="#072B73" panel-rounded="0.2" scale="0.3 0.3 0.3"
-    position="1 -0.2 -2" rotation="0 0 0"  >
-    <a-gui-button
-    id="btn4"
-    width="2.5" 
-    height="0.7" 
-    onclick="testButtonAction4"
-    value="skill d"
-    ></a-gui-button>
-  </a-gui-flex-container>
-		<a-entity id="mouseCursor" cursor="rayOrigin: mouse" raycaster="objects: [gui-interactable]"></a-entity>
+         <a-gui-flex-container
+            flex-direction="column" justify-content="center" align-items="normal" component-padding="0.1"
+            opacity="0.7" width="4" height="1.0" panel-color="#072B73" panel-rounded="0.2" scale="0.3 0.3 0.3"
+            position="3 3 -7" rotation="0 0 0"  >
+            <a-gui-progressbar width="3" height="0.3" margin="0 0 0" gui-item="" geometry="" material="" position="">
+               <a-entity id="progress_meter"
+                         geometry="primitive: box; width: 3; height: 0.3; depth: 0.004;" 
+                         material="shader: flat; opacity: 1; color: red;"
+                         position="0 0 0">
+                         
+               </a-entity>
+              </a-gui-progressbar>
+         </a-gui-flex-container>
 
-    </a-scene>
-</body>
-
-<script type="text/javascript">
-
-  window.testButtonAction1 = function () {
-    var player = document.getElementById('Player');
-    player.setAttribute('animation-mixer', 'clip: Roll;');
-    setTimeout(function() {
-      player.setAttribute('animation-mixer', 'clip: Idle;');
-    }, 1000);
-    
-  }
-  window.testButtonAction2 = function () {
-    var player = document.getElementById('Player');
-    player.setAttribute('animation-mixer', 'clip: Run;');
-    setTimeout(function() {
-      player.setAttribute('animation-mixer', 'clip: Idle;');
-    }, 1000);
-    
-  }
-  window.testButtonAction3 = function () {
-    var player = document.getElementById('Player');
-    player.setAttribute('animation-mixer', 'clip: Spin;');
-    setTimeout(function() {
-      player.setAttribute('animation-mixer', 'clip: Idle;');
-    }, 1000);
-    
-  }
-  window.testButtonAction4 = function () {
-    var player = document.getElementById('Player');
-    player.setAttribute('animation-mixer', 'clip: Walk;');
-    setTimeout(function() {
-      player.setAttribute('animation-mixer', 'clip: Idle;');
-    }, 1000);
-    
-  }
-
-
-</script>
+        <!-- our Skill UI Elements -->
+         <a-gui-flex-container
+            flex-direction="column" justify-content="center" align-items="normal" component-padding="0.1"
+            opacity="0.7" width="3.5" height="1.0" panel-color="#072B73" panel-rounded="0.2" scale="0.3 0.3 0.3"
+            position="-1 0.2 -2" rotation="0 0 0"  >
+            <a-gui-button
+               id="btn1"
+               width="2.5" 
+               height="0.7" 
+               onclick="testButtonAction1"
+               value="skill a">
+            </a-gui-button>
+         </a-gui-flex-container>
+         <a-gui-flex-container
+            flex-direction="column" justify-content="center" align-items="normal" component-padding="0.1"
+            opacity="0.7" width="3.5" height="1.0" panel-color="#072B73" panel-rounded="0.2" scale="0.3 0.3 0.3"
+            position="1 0.2 -2" rotation="0 0 0"  >
+            <a-gui-button
+               id="btn2"
+               width="2.5" 
+               height="0.7" 
+               onclick="testButtonAction2"
+               value="skill b"
+               ></a-gui-button>
+         </a-gui-flex-container>
+         <a-gui-flex-container
+            flex-direction="column" justify-content="center" align-items="normal" component-padding="0.1"
+            opacity="0.7" width="3.5" height="1.0" panel-color="#072B73" panel-rounded="0.2" scale="0.3 0.3 0.3"
+            position="-1 -0.2 -2" rotation="0 0 0"  >
+            <a-gui-button
+               id="btn3"
+               width="2.5" 
+               height="0.7" 
+               onclick="testButtonAction3"
+               value="skill c"
+               ></a-gui-button>
+         </a-gui-flex-container>
+         <a-gui-flex-container
+            flex-direction="column" justify-content="center" align-items="normal" component-padding="0.1"
+            opacity="0.7" width="3.5" height="1.0" panel-color="#072B73" panel-rounded="0.2" scale="0.3 0.3 0.3"
+            position="1 -0.2 -2" rotation="0 0 0"  >
+            <a-gui-button
+               id="btn4"
+               width="2.5" 
+               height="0.7" 
+               onclick="testButtonAction4"
+               value="skill d"
+               ></a-gui-button>
+         </a-gui-flex-container>
+         <a-entity id="mouseCursor" cursor="rayOrigin: mouse" raycaster="objects: [gui-interactable]"></a-entity>
+      </a-scene>
+   </body>
 </html>
