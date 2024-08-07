@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ACS Demo</title>
-    <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.5.0/dist/aframe-extras.min.js"></script>
-    <script src="https://rawgit.com/mayognaise/aframe-mouse-cursor-component/master/dist/aframe-mouse-cursor-component.min.js"></script>
+    <script src="https://rawgit.com/rdub80/aframe-gui/master/dist/aframe-gui.min.js"></script>
+
     <script src="./Script/newMain.js"></script> 
 </head>
 <body>
@@ -31,35 +32,97 @@
             rotation="0 -45 0"
             animation-mixer="clip:Idle">
         </a-entity>
-
         <!-- GUI Text Elements -->
-        <a-entity
-            id="questOne"
-            text="width: 2; color: black; value: 1; align: center"
-            position="-1 0.2 -2"
-        ></a-entity>
-        <a-entity
-            id="questTwo"
-            text="width: 2; color: black; value: 2; align: center"
-            position="1 0.2 -2"
-            >
-        </a-entity>
-        
-        <a-entity
-            id="questThree"
-            text="width: 2; color: black; value: 3; align: center"
-            position="-1 -0.2 -2"
-            event-set__enter="_event: mouseenter; scale: 3 1 1"
-            event-set__leave="_event: mouseleave; scale: 1 1 1">
-            >
-        </a-entity>
-        
-        <a-entity
-            id="questFour"
-            text="width: 2; color: black; value: 4; align: center"
-            position="1 -0.2 -2"
-            >
-        </a-entity>
+
+        <a-gui-flex-container
+        flex-direction="column" justify-content="center" align-items="normal" component-padding="0.1"
+        opacity="0.7" width="3.5" height="1.0" panel-color="#072B73" panel-rounded="0.2" scale="0.3 0.3 0.3"
+        position="-1 0.2 -2" rotation="0 0 0"  >
+        <a-gui-button
+        id="btn1"
+        width="2.5" 
+        height="0.7" 
+        onclick="testButtonAction1"
+        value="skill a"
+        >
+        </a-gui-button>
+        </a-gui-flex-container>
+        <a-gui-flex-container
+        flex-direction="column" justify-content="center" align-items="normal" component-padding="0.1"
+        opacity="0.7" width="3.5" height="1.0" panel-color="#072B73" panel-rounded="0.2" scale="0.3 0.3 0.3"
+        position="1 0.2 -2" rotation="0 0 0"  >
+        <a-gui-button
+          id="btn2"
+          width="2.5" 
+          height="0.7" 
+          onclick="testButtonAction2"
+          value="skill b"
+        ></a-gui-button>
+      </a-gui-flex-container>
+      <a-gui-flex-container
+      flex-direction="column" justify-content="center" align-items="normal" component-padding="0.1"
+      opacity="0.7" width="3.5" height="1.0" panel-color="#072B73" panel-rounded="0.2" scale="0.3 0.3 0.3"
+      position="-1 -0.2 -2" rotation="0 0 0"  >
+      <a-gui-button
+      id="btn3"
+      width="2.5" 
+      height="0.7" 
+      onclick="testButtonAction3"
+      value="skill c"
+      ></a-gui-button>
+    </a-gui-flex-container>
+    <a-gui-flex-container
+    flex-direction="column" justify-content="center" align-items="normal" component-padding="0.1"
+    opacity="0.7" width="3.5" height="1.0" panel-color="#072B73" panel-rounded="0.2" scale="0.3 0.3 0.3"
+    position="1 -0.2 -2" rotation="0 0 0"  >
+    <a-gui-button
+    id="btn4"
+    width="2.5" 
+    height="0.7" 
+    onclick="testButtonAction4"
+    value="skill d"
+    ></a-gui-button>
+  </a-gui-flex-container>
+		<a-entity id="mouseCursor" cursor="rayOrigin: mouse" raycaster="objects: [gui-interactable]"></a-entity>
+
     </a-scene>
 </body>
+
+<script type="text/javascript">
+
+  window.testButtonAction1 = function () {
+    var player = document.getElementById('Player');
+    player.setAttribute('animation-mixer', 'clip: Roll;');
+    setTimeout(function() {
+      player.setAttribute('animation-mixer', 'clip: Idle;');
+    }, 1000);
+    
+  }
+  window.testButtonAction2 = function () {
+    var player = document.getElementById('Player');
+    player.setAttribute('animation-mixer', 'clip: Run;');
+    setTimeout(function() {
+      player.setAttribute('animation-mixer', 'clip: Idle;');
+    }, 1000);
+    
+  }
+  window.testButtonAction3 = function () {
+    var player = document.getElementById('Player');
+    player.setAttribute('animation-mixer', 'clip: Spin;');
+    setTimeout(function() {
+      player.setAttribute('animation-mixer', 'clip: Idle;');
+    }, 1000);
+    
+  }
+  window.testButtonAction4 = function () {
+    var player = document.getElementById('Player');
+    player.setAttribute('animation-mixer', 'clip: Walk;');
+    setTimeout(function() {
+      player.setAttribute('animation-mixer', 'clip: Idle;');
+    }, 1000);
+    
+  }
+
+
+</script>
 </html>
