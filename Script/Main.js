@@ -1,6 +1,6 @@
-import { CreateGLB } from './Model.js';
-import { SelectObjectAnimation } from './Model.js';
-import { createGUI } from './Gui.js';
+import { CreateGLB } from './model.js';
+import { SelectObjectAnimation } from './model.js';
+import { createGUI } from './gui.js';
 
 function CreatePlayerGLB() {
     // 我方
