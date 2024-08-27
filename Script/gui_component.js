@@ -1,8 +1,16 @@
+//TDL
+//button：重構 button 對於顏色的修改
+//
+
+
+
 // button UI
 AFRAME.registerComponent('round_button', {
   schema: {
+    //顯示文字 、 寬度 、導圓 、 文字顏色、hover 顏色、默認顏色、啟動顏色
     text: {type: 'string', default: 'Button'},
     width :{type: 'float', default: 1.5},
+    // 高度 = 導圓
     radius: {type: 'float', default: 0.25},
     position: {type: 'vec3', default: {x: 0, y: 0, z: 0}},
     textColor: {type: 'color', default: '#ffffff'},
@@ -38,7 +46,7 @@ AFRAME.registerComponent('round_button', {
     background.setAttribute('class', 'clickable');
 
     // 创建右侧圆柱体
-    const rCirclePosition = {
+    const rightCirclePosition = {
       x: boxPosition.x +data.width/2,
       y: boxPosition.y,
       z: boxPosition.z
@@ -48,12 +56,12 @@ AFRAME.registerComponent('round_button', {
     circleR.setAttribute('color', data.defaultColor);
     circleR.setAttribute('radius', data.radius);
     circleR.setAttribute('height', boxPosition.z);
-    circleR.setAttribute('position', `${rCirclePosition.x} ${rCirclePosition.y} ${rCirclePosition.z}`);
+    circleR.setAttribute('position', `${rightCirclePosition.x} ${rightCirclePosition.y} ${rightCirclePosition.z}`);
     circleR.setAttribute('rotation', '0 0 0'); // 使圆柱体垂直于平面放置
     circleR.setAttribute('class', 'clickable');
 
     // 创建左侧圆柱体
-    const lCirclePosition = {
+    const leftCirclePosition = {
       x: boxPosition.x-data.width/2,
       y: boxPosition.y,
       z: boxPosition.z
@@ -63,7 +71,7 @@ AFRAME.registerComponent('round_button', {
     circleL.setAttribute('color', data.defaultColor);
     circleL.setAttribute('radius', data.radius);
     circleL.setAttribute('height', boxPosition.z);
-    circleL.setAttribute('position', `${lCirclePosition.x} ${lCirclePosition.y} ${lCirclePosition.z}`);
+    circleL.setAttribute('position', `${leftCirclePosition.x} ${leftCirclePosition.y} ${leftCirclePosition.z}`);
     circleL.setAttribute('rotation', '0 0 0'); // 使圆柱体垂直于平面放置
     circleL.setAttribute('class', 'clickable');
 
