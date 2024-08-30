@@ -6,7 +6,8 @@
       <title>ACS Demo</title>
       <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
       <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.5.0/dist/aframe-extras.min.js"></script>
-      <script src="./Script/gui.js"></script> 
+      <script type="module" src="./Script/Gui.js"></script>
+      <script src="./Script/Model.js"></script> 
       <script src="./Script/gui_component.js"></script> 
    </head>
    <body>
@@ -40,7 +41,7 @@
         <a-entity id="button3" round_button="text: skill3; width:1, radius: 0.25; position: -2 -2 -4"></a-entity>
         <a-entity id="button4" round_button="text: skill4; width:1, radius: 0.25; position: 2 -2 -4"></a-entity>
         <a-sky color="#8FE7FF"></a-sky>
-      <a-entity id="mouseCursor" cursor="rayOrigin: mouse" raycaster="objects: .clickable"></a-entity>
+         <a-entity id="mouseCursor" cursor="rayOrigin: mouse" raycaster="objects: .clickable"></a-entity>
       </a-scene>
    </body>
 </html>
