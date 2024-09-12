@@ -3,49 +3,58 @@
 import { loadModel, createAnimationMap, playAnimation, ANIMATIONS } from './animation.js';
 
 document.addEventListener('DOMContentLoaded', function () {
-  const buttonAnimations = [
-    { id: 'button1', animation: ANIMATIONS.SKILL01 },
-    { id: 'button2', animation: ANIMATIONS.SKILL02 },
-    { id: 'button3', animation: ANIMATIONS.SKILL03 },
-    { id: 'button4', animation: ANIMATIONS.SKILL04 },
-  ];
+  const CONFIG = {
+    buttonAnimations: [
+      { id: 'button1', animation: ANIMATIONS.SKILL01 },
+      { id: 'button2', animation: ANIMATIONS.SKILL02 },
+      { id: 'button3', animation: ANIMATIONS.SKILL03 },
+      { id: 'button4', animation: ANIMATIONS.SKILL04 },
+    ],
+    playerSelector: '#Player',
+    modelPath: './asset/Acs_testCube.glb'
+  };
 
-  const player = document.querySelector('#Player');
-
+  const player = document.querySelector(CONFIG.playerSelector);
   let animationMap = {};
+  let isPlayingAnimation = false;
 
-  loadModel('./asset/Acs_testCube.glb').then(({ model, animations }) => {
-    console.log('Model loaded successfully');
-    
-    // 創建動畫映射
-    animationMap = createAnimationMap(animations);
-    console.log('Animation map created:', animationMap);
-
-    // 輸出所有可用的動畫名稱和持續時間
-    Object.values(animationMap).forEach(anim => {
-      console.log(`Animation: ${anim.name}, Duration: ${anim.duration.toFixed(2)} seconds`);
+  function toggleButtonsState(disabled) {
+    CONFIG.buttonAnimations.forEach(({ id }) => {
+      const button = document.querySelector(`#${id}`);
+      if (button) button.disabled = disabled;
     });
+  }
 
-    // 設置按鈕事件監聽器
-    buttonAnimations.forEach(({ id, animation }) => {
+  function handleAnimationEnd(idleAnimName) {
+    const idleAnim = animationMap[idleAnimName];
+    if (idleAnim) {
+      playAnimation(player, idleAnim.name, idleAnim.duration);
+      console.log('Switching to idle animation');
+    } else {
+      console.warn('Idle animation not found');
+    }
+    isPlayingAnimation = false;
+    toggleButtonsState(false);
+  }
+
+  function playAnimationWithTimeout(animInfo) {
+    isPlayingAnimation = true;
+    toggleButtonsState(true);
+    playAnimation(player, animInfo.name, animInfo.duration);
+    console.log(`Playing animation: ${animInfo.name}`);
+    
+    setTimeout(() => handleAnimationEnd(ANIMATIONS.IDLE), animInfo.duration * 1000);
+  }
+
+  function setupButtonListeners() {
+    CONFIG.buttonAnimations.forEach(({ id, animation }) => {
       const button = document.querySelector(`#${id}`);
       if (button) {
         button.addEventListener('click', () => {
+          if (isPlayingAnimation) return;
           const animInfo = animationMap[animation];
           if (animInfo) {
-            playAnimation(player, animInfo.name, animInfo.duration);
-            console.log(`Playing animation: ${animInfo.name}`);
-            
-            // 設置計時器以在動畫結束後切換回閒置動畫
-            setTimeout(() => {
-              const idleAnim = animationMap[ANIMATIONS.IDLE];
-              if (idleAnim) {
-                playAnimation(player, idleAnim.name, idleAnim.duration);
-                console.log('Switching to idle animation');
-              } else {
-                console.warn('Idle animation not found');
-              }
-            }, animInfo.duration * 1000); // 將持續時間轉換為毫秒
+            playAnimationWithTimeout(animInfo);
           } else {
             console.warn(`Animation ${animation} not found in the animation map`);
           }
@@ -54,8 +63,9 @@ document.addEventListener('DOMContentLoaded', function () {
         console.warn(`Button with id '${id}' not found`);
       }
     });
+  }
 
-    // 初始化為閒置動畫
+  function initializeIdleAnimation() {
     const idleAnim = animationMap[ANIMATIONS.IDLE];
     if (idleAnim) {
       playAnimation(player, idleAnim.name, idleAnim.duration);
@@ -63,8 +73,26 @@ document.addEventListener('DOMContentLoaded', function () {
     } else {
       console.warn('Idle animation not found');
     }
+  }
 
-  }).catch(error => {
-    console.error('Failed to load model:', error);
-  });
+  // NOTE: 模型加載路徑可能會根據需求變化
+  // TODO: 未來可能需要修改此處以支持動態加載不同的模型文件
+  // 可能的改進：將模型路徑作為參數傳入，或從配置文件中讀取
+  loadModel(CONFIG.modelPath)
+    .then(({ model, animations }) => {
+      console.log('Model loaded successfully');
+      
+      animationMap = createAnimationMap(animations);
+      console.log('Animation map created:', animationMap);
+
+      Object.values(animationMap).forEach(anim => {
+        console.log(`Animation: ${anim.name}, Duration: ${anim.duration.toFixed(2)} seconds`);
+      });
+
+      setupButtonListeners();
+      initializeIdleAnimation();
+    })
+    .catch(error => {
+      console.error('Failed to load model:', error);
+    });
 });
