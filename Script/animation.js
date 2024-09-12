@@ -12,12 +12,14 @@ export const ANIMATIONS = {
 let mixer = null;
 let model = null;
 
-export function loadModel(src) {
+export async function loadModel(src) {
   const loader = new THREE.GLTFLoader();
   return new Promise((resolve, reject) => {
     loader.load(src, (gltf) => {
       model = gltf.scene;
       mixer = new THREE.AnimationMixer(model);
+      // 儲存動畫到模型對象
+      model.animations = gltf.animations;
       resolve({ model, mixer, animations: gltf.animations });
     }, undefined, (error) => {
       console.error('Error loading GLB:', error);
@@ -27,27 +29,38 @@ export function loadModel(src) {
 }
 
 export function PlayAnimationCycle(animation, duration = 1000) {
-  if (model && mixer) {
-    const clip = THREE.AnimationClip.findByName(model.animations, animation);
-    if (clip) {
-      const action = mixer.clipAction(clip);
-      action.reset().play();
-      console.log(`Playing animation: ${animation}`);
-      setTimeout(() => {
-        const idleClip = THREE.AnimationClip.findByName(model.animations, ANIMATIONS.IDLE);
-        if (idleClip) {
-          mixer.clipAction(idleClip).reset().play();
-          console.log('Switching to idle animation');
-        }
-      }, duration);
-    } else {
-      console.error(`Animation ${animation} not found`);
-    }
-  } else {
+  // 如果model 是無效狀態
+  if (!model || !mixer) {
     console.error('Model or mixer is not valid');
+    return;
   }
-}
 
+  const clip = model.animations.find(clip => clip.name === animation);
+  if (!clip) {
+    // 沒有動畫狀態
+    console.error(`Animation ${animation} not found`);
+    return;
+  }
+  const action = mixer.clipAction(clip);
+  action.reset().play();
+  console.log(`Playing animation: ${animation}`);
+  //  主要動態 
+  // time out 
+  setTimeout(() => {
+    const idleClip = model.animations.find(clip => clip.name === ANIMATIONS.IDLE);
+    if (idleClip) {
+      mixer.clipAction(idleClip).reset().play();
+      console.log('Switching to idle animation');
+    } else {
+      console.warn('Idle animation not found');
+    }
+  }, duration);
+  if (!model.animations || model.animations.length === 0) {
+    console.error('No animations found in the model');
+    return;
+  } 
+  console.log('Available animations:', model.animations.map(a => a.name));
+}
 export function getAnimationClipLength(animations) {
   const trackInfoArray = [];
   try {

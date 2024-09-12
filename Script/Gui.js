@@ -17,7 +17,8 @@ document.addEventListener('DOMContentLoaded', function () {
     animationInfo.forEach(trackInfo => {
       console.log(`Track Name: ${trackInfo.name}, Length: ${trackInfo.length}`);
     });
-
+  
+    // 現在模型已加載，設置按鈕事件監聽器
     buttonAnimations.forEach(({ id, animation }) => {
       const button = document.querySelector(`#${id}`);
       if (button) {
@@ -26,5 +27,5 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }).catch(error => {
     console.error('Failed to load model:', error);
-  });
+  });  
 });
