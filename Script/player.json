@@ -1,0 +1,57 @@
+{
+  "skills": [
+    {
+      "name": "Fireball",
+      "animationName": "skill01",
+      "duration": 2,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 20
+        }
+      ]
+    },
+    {
+      "name": "Ice Shard",
+      "animationName": "skill02",
+      "duration": 1.5,
+      "effects": [
+        {
+          "type": "damage",
+          "value": 15
+        },
+        {
+          "type": "slow",
+          "value": 0.8
+        }
+      ]
+    },
+    {
+      "name": "Heal",
+      "animationName": "skill03",
+      "duration": 1,
+      "effects": [
+        {
+          "type": "heal",
+          "value": 30
+        }
+      ]
+    },
+    {
+      "name": "Buff",
+      "animationName": "skill04",
+      "duration": 1.5,
+      "effects": [
+        {
+          "type": "buff",
+          "stat": "strength",
+          "value": 1.2
+        }
+      ]
+    }
+  ],
+  "playerSelector": "#Player",
+  "modelPath": "./asset/Acs_testCube.glb",
+  "buttonPrefix": "button",
+  "idleAnimation": "idle"
+}

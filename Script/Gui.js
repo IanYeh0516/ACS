@@ -1,72 +1,83 @@
 // gui.js
 
-import { loadModel, createAnimationMap, playAnimation, ANIMATIONS } from './animation.js';
+import { loadModel, createAnimationMap, playAnimation } from './animation.js';
+import { Skill } from './skill.js';
 
-document.addEventListener('DOMContentLoaded', function () {
-  const CONFIG = {
-    buttonAnimations: [
-      { id: 'button1', animation: ANIMATIONS.SKILL01 },
-      { id: 'button2', animation: ANIMATIONS.SKILL02 },
-      { id: 'button3', animation: ANIMATIONS.SKILL03 },
-      { id: 'button4', animation: ANIMATIONS.SKILL04 },
-    ],
-    playerSelector: '#Player',
-    modelPath: './asset/Acs_testCube.glb'
-  };
+let CONFIG;
+
+async function loadConfig() {
+  try {
+    const response = await fetch('Script/player.json');
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const config = await response.json();
+    CONFIG = {
+      ...config,
+      skills: config.skills.map(skillConfig => new Skill(skillConfig))
+    };
+    console.log('Configuration loaded successfully:', CONFIG);
+  } catch (error) {
+    console.error('Failed to load configuration:', error);
+    // 可以在這裡添加一些錯誤處理邏輯，比如使用默認配置
+  }
+}
+
+document.addEventListener('DOMContentLoaded', async function () {
+  await loadConfig();
+  if (!CONFIG) {
+    console.error('Failed to load configuration. Cannot proceed.');
+    return;
+  }
 
   const player = document.querySelector(CONFIG.playerSelector);
   let animationMap = {};
-  let isPlayingAnimation = false;
+  let isExecutingSkill = false;
 
   function toggleButtonsState(disabled) {
-    CONFIG.buttonAnimations.forEach(({ id }) => {
-      const button = document.querySelector(`#${id}`);
+    CONFIG.skills.forEach((skill, index) => {
+      const button = document.querySelector(`#${CONFIG.buttonPrefix}${index + 1}`);
       if (button) button.disabled = disabled;
     });
   }
 
-  function handleAnimationEnd(idleAnimName) {
-    const idleAnim = animationMap[idleAnimName];
+  function handleSkillEnd() {
+    const idleAnim = animationMap[CONFIG.idleAnimation];
     if (idleAnim) {
       playAnimation(player, idleAnim.name, idleAnim.duration);
       console.log('Switching to idle animation');
     } else {
       console.warn('Idle animation not found');
     }
-    isPlayingAnimation = false;
+    isExecutingSkill = false;
     toggleButtonsState(false);
   }
 
-  function playAnimationWithTimeout(animInfo) {
-    isPlayingAnimation = true;
+  function executeSkillWithTimeout(skill, target) {
+    isExecutingSkill = true;
     toggleButtonsState(true);
-    playAnimation(player, animInfo.name, animInfo.duration);
-    console.log(`Playing animation: ${animInfo.name}`);
+    skill.execute(target, player);
     
-    setTimeout(() => handleAnimationEnd(ANIMATIONS.IDLE), animInfo.duration * 1000);
+    setTimeout(() => handleSkillEnd(), skill.duration * 1000);
   }
 
   function setupButtonListeners() {
-    CONFIG.buttonAnimations.forEach(({ id, animation }) => {
-      const button = document.querySelector(`#${id}`);
+    CONFIG.skills.forEach((skill, index) => {
+      const button = document.querySelector(`#${CONFIG.buttonPrefix}${index + 1}`);
       if (button) {
         button.addEventListener('click', () => {
-          if (isPlayingAnimation) return;
-          const animInfo = animationMap[animation];
-          if (animInfo) {
-            playAnimationWithTimeout(animInfo);
-          } else {
-            console.warn(`Animation ${animation} not found in the animation map`);
-          }
+          if (isExecutingSkill) return;
+          const target = { health: 100, speed: 1 }; // 示例目標
+          executeSkillWithTimeout(skill, target);
         });
       } else {
-        console.warn(`Button with id '${id}' not found`);
+        console.warn(`Button for skill ${skill.name} not found`);
       }
     });
   }
 
   function initializeIdleAnimation() {
-    const idleAnim = animationMap[ANIMATIONS.IDLE];
+    const idleAnim = animationMap[CONFIG.idleAnimation];
     if (idleAnim) {
       playAnimation(player, idleAnim.name, idleAnim.duration);
       console.log('Initializing with idle animation');
@@ -75,24 +86,20 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  // NOTE: 模型加載路徑可能會根據需求變化
-  // TODO: 未來可能需要修改此處以支持動態加載不同的模型文件
-  // 可能的改進：將模型路徑作為參數傳入，或從配置文件中讀取
-  loadModel(CONFIG.modelPath)
-    .then(({ model, animations }) => {
-      console.log('Model loaded successfully');
-      
-      animationMap = createAnimationMap(animations);
-      console.log('Animation map created:', animationMap);
+  try {
+    const { model, animations } = await loadModel(CONFIG.modelPath);
+    console.log('Model loaded successfully');
+    
+    animationMap = createAnimationMap(animations);
+    console.log('Animation map created:', animationMap);
 
-      Object.values(animationMap).forEach(anim => {
-        console.log(`Animation: ${anim.name}, Duration: ${anim.duration.toFixed(2)} seconds`);
-      });
-
-      setupButtonListeners();
-      initializeIdleAnimation();
-    })
-    .catch(error => {
-      console.error('Failed to load model:', error);
+    Object.values(animationMap).forEach(anim => {
+      console.log(`Animation: ${anim.name}, Duration: ${anim.duration.toFixed(2)} seconds`);
     });
+
+    setupButtonListeners();
+    initializeIdleAnimation();
+  } catch (error) {
+    console.error('Failed to load model:', error);
+  }
 });
