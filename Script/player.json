@@ -1,0 +1,20 @@
+{
+ "name": "木博喵",
+  "skills": {
+    "skill01": {
+      "duration": 1
+    },
+    "skill02": {
+      "duration": 1
+    },
+    "skill03": {
+      "duration": 1
+    },
+    "skill04": {
+      "duration": 1.958
+    },
+    "idle": {
+      "duration": 1
+    }
+  }
+}
