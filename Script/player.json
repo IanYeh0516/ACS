@@ -2,19 +2,19 @@
  "name": "木博喵",
   "skills": {
     "skill01": {
-      "duration": 1
+      "duration": 3.67
     },
     "skill02": {
-      "duration": 1
+      "duration": 2
     },
     "skill03": {
-      "duration": 1
+      "duration": 2
     },
     "skill04": {
-      "duration": 1.958
+      "duration": 2
     },
     "idle": {
-      "duration": 1
+      "duration": 0.96
     }
   }
 }
