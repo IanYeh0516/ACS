@@ -1,8 +1,3 @@
-//TDL
-//button：重構 button 對於顏色的修改
-//
-
-
 
 // button UI
 AFRAME.registerComponent('round_button', {
