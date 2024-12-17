@@ -2,7 +2,6 @@
 
 import { playAnimation, ANIMATIONS } from './animation.js';
 import { loadLocalJson } from './jsonHandler.js';
-import { Animationlog } from '../asset/detectGLBAnimations.js';
 
 export const BUTTON_SKILL_MAPPING = [
   { buttonId: 'button1', skillName: ANIMATIONS.SKILL01 },
@@ -60,10 +59,12 @@ document.addEventListener('DOMContentLoaded', function () {
     toggleButtonsState(true);
     playAnimation(player, trackName, animInfo.duration);
     console.log(`播放動畫: ${animInfo.name}+ ${animInfo.duration} s`);
+    
     setTimeout(() => handleAnimationEnd('idle'), animInfo.duration * 1000);
   }
 
   // 設置按鈕事件監聽器
+  // 問題在這裡
   function setupButtonListeners() {
     BUTTON_SKILL_MAPPING.forEach(({ buttonId, skillName }) => {
       const button = document.querySelector(`#${buttonId}`);
